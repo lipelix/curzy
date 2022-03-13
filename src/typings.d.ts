@@ -14,3 +14,7 @@ type Rates = {
   'rate': number,
   'timestamp': EpochTimeStamp 
 }
+
+type Institutions =
+  'REVOLUT' |
+  'CSOB'
