@@ -3,7 +3,7 @@ import { processData as processDataCsob } from './feeders/csobFeeder'
 import express from 'express'
 
 const app = express()
-const PORT = 3000
+const PORT = process.env.PORT || 3000
 
 app.get('/revolut', async (req, res) => {
   const respon = await processDataRevolut()
