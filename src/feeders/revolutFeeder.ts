@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer';
 
 const fetchData = async (): Promise<string> => {
-  const browser = await puppeteer.launch({headless: true});
+  const browser = await puppeteer.launch({headless: true, args:['--no-sandbox']});
   const page = await browser.newPage();
   await page.goto('https://www.revolut.com/api/exchange/quote?amount=1&country=CZ&fromCurrency=CZK&isRecipientAmount=false&toCurrency=EUR');
   const rawData = await page.$eval('pre', (el) => {
