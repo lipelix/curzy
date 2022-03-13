@@ -2,7 +2,7 @@ import puppeteer from 'puppeteer';
 import { parse } from 'csv-parse/sync';
 
 export const fetchData = async (): Promise<ParsedRecordsCsob> => {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({headless: true, args:['--no-sandbox']});
   const page = await browser.newPage();
   await page.goto(`https://www.csob.cz/portal/lide/kurzovni-listek-old/-/date/kurzy.txt`);
   const rawData = await page.$eval('pre', (el) => {
