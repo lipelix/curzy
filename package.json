@@ -9,6 +9,10 @@
     "build": "tsc",
     "build-watch": "tsc --watch"
   },
+  "engines": {
+    "node": "^17.7.1",
+    "npm": "^8.5.2"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lipelix/curzy.git"
