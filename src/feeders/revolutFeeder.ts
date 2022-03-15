@@ -1,9 +1,13 @@
 import puppeteer from 'puppeteer';
+import retry from 'async-await-retry';
 
 const fetchData = async (): Promise<string> => {
   const browser = await puppeteer.launch({headless: true, args:['--no-sandbox']});
   const page = await browser.newPage();
-  await page.goto('https://www.revolut.com/api/exchange/quote?amount=1&country=CZ&fromCurrency=CZK&isRecipientAmount=false&toCurrency=EUR');
+  await retry(async () => {
+    return page.goto(`https://www.revolut.com/api/exchange/quote?amount=1&country=CZ&fromCurrency=CZK&isRecipientAmount=false&toCurrency=EUR`)
+  }, undefined, {retriesMax: 4, interval: 100, exponential: true, factor: 2, jitter: 100})
+
   const rawData = await page.$eval('pre', (el) => {
     const element = el as HTMLElement
     return element.innerText

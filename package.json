@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/lipelix/curzy#readme",
   "dependencies": {
+    "async-await-retry": "^1.2.4",
     "csv-parse": "^5.0.4",
     "express": "^4.17.3",
     "mongodb": "^4.4.1",

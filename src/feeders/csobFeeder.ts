@@ -1,10 +1,14 @@
 import puppeteer from 'puppeteer';
 import { parse } from 'csv-parse/sync';
+import retry from 'async-await-retry';
 
 export const fetchData = async (): Promise<ParsedRecordsCsob> => {
   const browser = await puppeteer.launch({headless: true, args:['--no-sandbox']});
   const page = await browser.newPage();
-  await page.goto(`https://www.csob.cz/portal/lide/kurzovni-listek-old/-/date/kurzy.txt`);
+  await retry(async () => {
+    return page.goto(`https://www.csob.cz/portal/lide/kurzovni-listek-old/-/date/kurzy.txt`)
+  }, undefined, {retriesMax: 4, interval: 100, exponential: true, factor: 2, jitter: 100})
+
   const rawData = await page.$eval('pre', (el) => {
     const element = el as HTMLElement
     return element.innerText
