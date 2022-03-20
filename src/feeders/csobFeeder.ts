@@ -40,7 +40,7 @@ export const fetchData = async (): Promise<ParsedRecordsCsob> => {
 
 const normalizeData = (records: ParsedRecordsCsob): Rates => {
   const recordEUR = records.find((record) => record['Měna'] === 'EUR') || {'Prodej': [NaN], 'LastUpdate': '0'}
-  const timestamp = Date.parse(recordEUR['LastUpdate']) / 1000
+  const timestamp = Date.parse(recordEUR['LastUpdate'])
 
   return {
     'from': 'CZK',
