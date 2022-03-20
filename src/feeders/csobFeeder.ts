@@ -15,6 +15,7 @@ export const fetchData = async (): Promise<ParsedRecordsCsob> => {
   })
   await browser.close()
 
+  const [lastUpdate] = rawData.split(';;;;Devizy')
   const csv = rawData.slice(rawData.indexOf('Země'), rawData.length).trim()
   const records = parse(csv, {
     columns: true,
@@ -28,7 +29,8 @@ export const fetchData = async (): Promise<ParsedRecordsCsob> => {
         'Změna': parseFloat(record['Změna']),
         'Nákup': record['Nákup'].map((value: string) => parseFloat(value.replace(',', '.'))),
         'Prodej': record['Prodej'].map((value: string) => parseFloat(value.replace(',', '.'))),
-        'Střed': record['Střed'].map((value: string) => parseFloat(value.replace(',', '.')))
+        'Střed': record['Střed'].map((value: string) => parseFloat(value.replace(',', '.'))),
+        'LastUpdate': lastUpdate.trim()
       }
     }
   });
@@ -37,13 +39,14 @@ export const fetchData = async (): Promise<ParsedRecordsCsob> => {
 };
 
 const normalizeData = (records: ParsedRecordsCsob): Rates => {
-  const recordEUR = records.find((record) => record['Měna'] === 'EUR') || {'Prodej': [NaN]}
+  const recordEUR = records.find((record) => record['Měna'] === 'EUR') || {'Prodej': [NaN], 'LastUpdate': '0'}
+  const timestamp = Date.parse(recordEUR['LastUpdate']) / 1000
 
   return {
     'from': 'CZK',
     'to': 'EUR',
     'rate': recordEUR['Prodej'][0],
-    'timestamp': Date.now()
+    'timestamp': timestamp
   }
 }
 

@@ -1,23 +1,24 @@
 type ParsedRecordsCsob = Array<{
-  'Země': String,
+  'Země': string,
   'Množství': number,
-  'Měna': String,
+  'Měna': string,
   'Změna': number,
   'Nákup': Array<number>,
   'Prodej': Array<number>,
-  'Střed': Array<number>
+  'Střed': Array<number>,
+  'LastUpdate': string,
 }>
 
 type Rates = {
-  'from': String,
-  'to': String,
+  'from': string,
+  'to': string,
   'rate': number,
   'timestamp': EpochTimeStamp 
 }
 
 type RatesDb = {
-  'from': String,
-  'to': String,
+  'from': string,
+  'to': string,
   'rate': number,
   'timestamp': EpochTimeStamp,
   'institution': Institutions

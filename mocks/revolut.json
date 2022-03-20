@@ -1,19 +1,19 @@
 {
   "sender": {
     "amount": 1,
-    "currency": "EUR"
-  },
-  "recipient": {
-    "amount": 25,
     "currency": "CZK"
   },
-  "rate": {
-    "from": "EUR",
-    "to": "CZK",
-    "rate": 25.537261,
-    "timestamp": 1646431142668
+  "recipient": {
+    "amount": 0,
+    "currency": "EUR"
   },
-  "fxTooltip": "Our rate (including any fees) is currently 0.78% worse than the European Central Bank (ECB) rate. This comparison rate is typically one of the best available.\n\nOur exchange fees help cover the cost of exchanging uncommon currencies and the uncertainty of making exchanges while the market is closed. You can find out more in our <feesLink>fees page</feesLink>",
+  "rate": {
+    "from": "CZK",
+    "to": "EUR",
+    "rate": 0.04013,
+    "timestamp": 1647635973065
+  },
+  "fxTooltip": "Our rate (including any fees) is currently 0.5% worse than the European Central Bank (ECB) rate. This comparison rate is typically one of the best available.\n\nOur exchange fees help cover the cost of exchanging uncommon currencies and the uncertainty of making exchanges while the market is closed. You can find out more in our <feesLink>fees page</feesLink>",
   "plans": [
     {
       "id": "STANDARD",
@@ -21,24 +21,24 @@
       "fees": {
         "fx": {
           "amount": 0,
-          "currency": "EUR"
+          "currency": "CZK"
         },
         "fxWeekend": {
           "amount": {
             "amount": {
               "amount": 0,
-              "currency": "EUR"
+              "currency": "CZK"
             },
             "percentage": "1%"
           }
         },
         "total": {
           "amount": 0,
-          "currency": "EUR"
+          "currency": "CZK"
         },
         "cost": {
           "amount": 1,
-          "currency": "EUR"
+          "currency": "CZK"
         }
       },
       "tooltipLong": "Our fees include a fee to exchange uncommon currencies or outside market hours. You can find out more in our  <feesLink>fees page</feesLink> and confirm exact fees at the time of transaction",
