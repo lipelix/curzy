@@ -1,8 +1,8 @@
 import mongodb, { Document } from 'mongodb'
 
 const responseMapper = (doc: Document): RatesDb => {
-  const {from, to, rate, timestamp, institution} = doc
-  return {from, to, rate, timestamp, institution}
+  const {from, to, rate, timestamp, institution, paymentType} = doc
+  return {from, to, rate, timestamp, institution, paymentType}
 }
 
 export const getLatestRates = async (db: mongodb.Db) => {

@@ -17,15 +17,17 @@ const fetchData = async (): Promise<string> => {
   return rawData
 };
 
-const normalizeData = (rawData: string): Rates => {
+const normalizeData = (rawData: string): RatesDb => {
   const {rate} = JSON.parse(rawData)
   return {
     ...rate,
-    rate: 1.0 / rate['rate']
+    'rate': 1.0 / rate['rate'],
+    'institution': 'REVOLUT',
+    'paymentType': 'CARD',
   }
 }
 
-export const processData = async (): Promise<Rates> => {
+export const processData = async (): Promise<RatesDb> => {
   const rawData = await fetchData()
   return normalizeData(rawData)
 }

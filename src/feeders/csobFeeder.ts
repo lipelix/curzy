@@ -38,7 +38,7 @@ export const fetchData = async (): Promise<ParsedRecordsCsob> => {
   return records
 };
 
-const normalizeData = (records: ParsedRecordsCsob): Rates => {
+const normalizeData = (records: ParsedRecordsCsob): RatesDb => {
   const recordEUR = records.find((record) => record['Měna'] === 'EUR') || {'Prodej': [NaN], 'LastUpdate': '0'}
   const timestamp = Date.parse(recordEUR['LastUpdate'])
 
@@ -46,11 +46,13 @@ const normalizeData = (records: ParsedRecordsCsob): Rates => {
     'from': 'CZK',
     'to': 'EUR',
     'rate': recordEUR['Prodej'][0],
-    'timestamp': timestamp
+    'timestamp': timestamp,
+    'institution': 'CSOB',
+    'paymentType': 'SEPA',
   }
 }
 
-export const processData = async (): Promise<Rates> => {
+export const processData = async (): Promise<RatesDb> => {
   const rawData = await fetchData()
   return normalizeData(rawData)
 }

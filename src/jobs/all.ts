@@ -4,8 +4,8 @@ import { run } from './storeRates'
 
 (async () => {
   try {
-    await run(processDataCsob, 'CSOB')
-    await run(processDataRevolut, 'REVOLUT')
+    await run(processDataCsob)
+    await run(processDataRevolut)
     process.exit(0);
   } catch (err) {
     process.exit(1);

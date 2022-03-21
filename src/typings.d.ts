@@ -9,20 +9,18 @@ type ParsedRecordsCsob = Array<{
   'LastUpdate': string,
 }>
 
-type Rates = {
-  'from': string,
-  'to': string,
-  'rate': number,
-  'timestamp': EpochTimeStamp 
-}
-
 type RatesDb = {
   'from': string,
   'to': string,
   'rate': number,
   'timestamp': EpochTimeStamp,
-  'institution': Institutions
+  'institution': Institutions,
+  'paymentType': PaymentTypes,
 }
+
+type PaymentTypes =
+  'CARD' |
+  'SEPA'
 
 type Institutions =
   'REVOLUT' |

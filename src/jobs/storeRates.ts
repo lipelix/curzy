@@ -1,11 +1,7 @@
 import { MongoClient } from 'mongodb'
 
-export const run = async (processData: Function, institution: Institutions) => {
+export const run = async (processData: Function) => {
   const ratesData = await processData()
-  const storeData = {
-    ...ratesData,
-    'institution': institution
-  }
 
   const url = `mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PWD}@${process.env.MONGO_DB_HOST}?retryWrites=true&w=majority`;
   const dbName = 'curzy-production-cluster';
@@ -18,9 +14,9 @@ export const run = async (processData: Function, institution: Institutions) => {
     const db = client.db(dbName);
     const collection = db.collection('rates');
   
-    console.log('Record saving:', JSON.stringify(storeData))
-    await collection.insertOne(storeData)
-    console.log('Record saved:', JSON.stringify(storeData))
+    console.log('Record saving:', JSON.stringify(ratesData))
+    await collection.insertOne(ratesData)
+    console.log('Record saved:', JSON.stringify(ratesData))
   
   } finally { 
     await client.close();
