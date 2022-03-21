@@ -1,6 +1,7 @@
 import express from 'express'
 import { initializeDbConnection } from './db/init'
 import rates from './api/rates'
+import fees from './api/fees'
 
 const app = express()
 const PORT = process.env.PORT || 3001;
@@ -10,6 +11,7 @@ const PORT = process.env.PORT || 3001;
 })(app)
 
 app.use('/api/rates', rates)
+app.use('/api/fees', fees)
 
 app.get('/', async (req, res) => {
   res.send('Welcome on Curzy!')
