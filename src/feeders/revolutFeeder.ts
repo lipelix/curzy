@@ -24,6 +24,7 @@ const normalizeData = (rawData: string): RatesDb => {
     'rate': 1.0 / rate['rate'],
     'institution': 'REVOLUT',
     'paymentType': 'CARD',
+    'fee': 0,
   }
 }
 

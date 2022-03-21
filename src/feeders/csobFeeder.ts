@@ -49,6 +49,7 @@ const normalizeData = (records: ParsedRecordsCsob): RatesDb => {
     'timestamp': timestamp,
     'institution': 'CSOB',
     'paymentType': 'SEPA',
+    'fee': 0,
   }
 }
 

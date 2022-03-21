@@ -16,6 +16,7 @@ type RatesDb = {
   'timestamp': EpochTimeStamp,
   'institution': Institutions,
   'paymentType': PaymentTypes,
+  'fee': number,
 }
 
 type PaymentTypes =
