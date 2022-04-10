@@ -3,7 +3,7 @@ import retry from 'async-await-retry';
 import { exit } from 'process';
 
 const fetchData = async (): Promise<Array<AirbankRate>> => {
-  const browser = await puppeteer.launch({headless: false, args:['--no-sandbox']});
+  const browser = await puppeteer.launch({headless: true, args:['--no-sandbox']});
   const page = await browser.newPage();
   let rawData = null;
 
