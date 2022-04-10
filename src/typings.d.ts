@@ -25,4 +25,21 @@ type PaymentTypes =
 
 type Institutions =
   'REVOLUT' |
-  'CSOB'
+  'CSOB' |
+  'AIRBANK'
+
+type AirbankRate = {
+  code: string,
+  buy: number,
+  diameter: number,
+  sell: number,
+  quantity: number,
+  image: string,
+  isIncomingPayments: boolean,
+  isOutgoingPayments: boolean,
+  isCreditCard: boolean,
+  cnbVariance: number,
+  country: string,
+  lastRevisionDate: string,
+  __typename: string
+}

@@ -1,11 +1,13 @@
 import { processData as processDataCsob } from '../feeders/csobFeeder'
 import { processData as processDataRevolut } from '../feeders/revolutFeeder'
+import { processData as processDataAirbank } from '../feeders/airbankFeeder'
 import { run } from './storeRates'
 
 (async () => {
   try {
     await run(processDataCsob)
     await run(processDataRevolut)
+    await run(processDataAirbank)
     process.exit(0);
   } catch (err) {
     process.exit(1);
