@@ -10,9 +10,11 @@ export const getLatestRates = async (db: mongodb.Db) => {
 
   const lastRateRevolut = await dCollection.find({ institution: "REVOLUT" }).sort({ '_id': -1 }).limit(1).toArray()
   const lastRateCsob = await dCollection.find({ institution: "CSOB" }).sort({ '_id': -1 }).limit(1).toArray()
+  const lastRateAirbank = await dCollection.find({ institution: "AIRBANK" }).sort({ '_id': -1 }).limit(1).toArray()
 
   return [
     ...lastRateRevolut.map(responseMapper),
+    ...lastRateAirbank.map(responseMapper),
     ...lastRateCsob.map(responseMapper)
   ]
 }
