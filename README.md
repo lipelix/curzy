@@ -56,7 +56,7 @@ You can run this project locally (even if it doesn't make much sense :).
 1. Setup MongoDb - prepare host, username and password for connection
 2. Clone the repo
    ```sh
-   git clone https://github.com/lipelix/weather-for-humans.git
+   git clone https://github.com/lipelix/curzy.git
    ```
 3. Install NPM packages
    ```sh
@@ -105,7 +105,7 @@ This is very easy. Just open https://curzy.herokuapp.com/ .
 
 Libor Váchal - [LinkedIn](https://www.linkedin.com/in/liborvachal/)
 
-Project Link: [https://github.com/lipelix/weather-for-humans](https://github.com/lipelix/weather-for-humans)
+Project Link: [https://github.com/lipelix/curzy](https://github.com/lipelix/curzy)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
