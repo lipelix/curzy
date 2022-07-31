@@ -94,8 +94,8 @@ This is very easy. Just open https://curzy.herokuapp.com/ .
 - [x] Deploy project
 - [ ] Add Support for automatic deployment
 - [ ] Multi-language Support
-    - [x] Czech
-    - [ ] English
+    - [ ] Czech
+    - [x] English
 - [ ] Add more banks, payment methods
 
 <p align="right">(<a href="#top">back to top</a>)</p>
