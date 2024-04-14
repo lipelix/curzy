@@ -82,9 +82,8 @@ jobs:
     # Currently the only to way to pass variables is by creating a `*.auto.tfvars` variables file.
     - name: Setup Terraform variables
       id: vars
+      working-directory: ./infra
       run: |-
-        pwd
-        ls -la
         cat > pipeline.auto.tfvars <<EOF
         mongodb_atlas_private_key = "${{ secrets.ATLAS_DB_PROJECT_PRIVATE_API_KEY }}"
         curzy_user_password       = "${{ secrets.MONGODB_USER_PASSWORD }}"
