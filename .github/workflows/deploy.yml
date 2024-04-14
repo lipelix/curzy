@@ -43,17 +43,17 @@
 #       with:
 #         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-name: 'Release & deploy'
+name: "Release & deploy"
 
 on:
   push:
     branches:
-    - 'main'
+      - "main"
   pull_request:
 
 jobs:
   terraform-plan:
-    name: 'Terraform plan'
+    name: "Terraform plan"
     runs-on: ubuntu-latest
     environment: production
 
@@ -64,47 +64,43 @@ jobs:
         shell: bash
 
     steps:
-    # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v3
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    # Setup env variables
-    # - name: Set env
-    #   run: echo "LATEST_RELEASE_SHA256=$(curl -s https://github.com/lipelix/weather-for-humans/archive/refs/tags/latest.tar.gz | openssl sha256)" >> $GITHUB_ENV
+      # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
-        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      # Since Terraform cloud does not support run variables at this time.
+      # Currently the only to way to pass variables is by creating a `*.auto.tfvars` variables file.
+      - name: Setup Terraform variables
+        id: vars
+        run: |-
+          cat > pipeline.auto.tfvars <<EOF
+          mongodb_atlas_private_key = "${{ secrets.ATLAS_DB_PROJECT_PRIVATE_API_KEY }}"
+          curzy_user_password       = "${{ secrets.MONGODB_USER_PASSWORD }}"
+          EOF
+          cat pipeline.auto.tfvars
 
-    # Since Terraform cloud does not support run variables at this time.
-    # Currently the only to way to pass variables is by creating a `*.auto.tfvars` variables file.
-    - name: Setup Terraform variables
-      id: vars
-      run: |-
-        cat > pipeline.auto.tfvars <<EOF
-        mongodb_atlas_private_key = "${{ secrets.ATLAS_DB_PROJECT_PRIVATE_API_KEY }}"
-        curzy_user_password       = "${{ secrets.MONGODB_USER_PASSWORD }}"
-        EOF
-        cat pipeline.auto.tfvars
+      # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+      - name: Terraform Init
+        run: terraform init
 
-    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: Terraform Init
-      run: terraform init
+      # Checks that all Terraform configuration files adhere to a canonical format
+      - name: Terraform Format
+        run: terraform fmt -check -diff
 
-    # Checks that all Terraform configuration files adhere to a canonical format
-    - name: Terraform Format
-      run: terraform fmt -check -diff
-
-    # Generates an execution plan for Terraform
-    - name: Terraform Plan
-      run: terraform plan -input=false
+      # Generates an execution plan for Terraform
+      - name: Terraform Plan
+        run: terraform plan -input=false
 
   terraform-apply:
-    name: 'Terraform apply'
+    name: "Terraform apply"
     if: github.ref == 'refs/heads/main'
-    needs: ['terraform-plan']
+    needs: ["terraform-plan"]
     runs-on: ubuntu-latest
     environment: production
 
@@ -115,31 +111,31 @@ jobs:
         shell: bash
 
     steps:
-    # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v3
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
-        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-    # Since Terraform cloud does not support run variables at this time.
-    # Currently the only to way to pass variables is by creating a `*.auto.tfvars` variables file.
-    - name: Setup Terraform variables
-      id: vars
-      run: |-
-        cat > pipeline.auto.tfvars <<EOF
-        mongodb_atlas_private_key = "${{ secrets.ATLAS_DB_PROJECT_PRIVATE_API_KEY }}"
-        curzy_user_password       = "${{ secrets.MONGODB_USER_PASSWORD }}"
-        EOF
+      # Since Terraform cloud does not support run variables at this time.
+      # Currently the only to way to pass variables is by creating a `*.auto.tfvars` variables file.
+      - name: Setup Terraform variables
+        id: vars
+        run: |-
+          cat > pipeline.auto.tfvars <<EOF
+          mongodb_atlas_private_key = "${{ secrets.ATLAS_DB_PROJECT_PRIVATE_API_KEY }}"
+          curzy_user_password       = "${{ secrets.MONGODB_USER_PASSWORD }}"
+          EOF
 
-    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: Terraform Init
-      run: terraform init
+      # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+      - name: Terraform Init
+        run: terraform init
 
-      # On push to "main", build or change infrastructure according to Terraform configuration files
-      # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
-    - name: Terraform Apply
-      run: terraform apply -auto-approve -input=false
+        # On push to "main", build or change infrastructure according to Terraform configuration files
+        # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -input=false
