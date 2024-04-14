@@ -83,6 +83,8 @@ jobs:
     - name: Setup Terraform variables
       id: vars
       run: |-
+        pwd
+        ls -la
         cat > pipeline.auto.tfvars <<EOF
         mongodb_atlas_private_key = "${{ secrets.ATLAS_DB_PROJECT_PRIVATE_API_KEY }}"
         curzy_user_password       = "${{ secrets.MONGODB_USER_PASSWORD }}"
