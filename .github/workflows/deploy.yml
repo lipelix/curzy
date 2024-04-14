@@ -60,7 +60,7 @@ jobs:
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
       run:
-        working-directory: terraform
+        working-directory: infra
         shell: bash
 
     steps:
@@ -82,7 +82,6 @@ jobs:
     # Currently the only to way to pass variables is by creating a `*.auto.tfvars` variables file.
     - name: Setup Terraform variables
       id: vars
-      working-directory: ./infra
       run: |-
         cat > pipeline.auto.tfvars <<EOF
         mongodb_atlas_private_key = "${{ secrets.ATLAS_DB_PROJECT_PRIVATE_API_KEY }}"
@@ -112,7 +111,7 @@ jobs:
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
       run:
-        working-directory: terraform
+        working-directory: infra
         shell: bash
 
     steps:
