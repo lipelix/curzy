@@ -19,11 +19,6 @@ variable "curzy_user_password" {
   sensitive = true
 }
 
-variable "tf_api_token" {
-  type      = string
-  sensitive = true
-}
-
 module "curzy-atlas-mongo-db" {
   source                             = "./atlas-mongo-db"
   mongodb_atlas_cluster_name         = "curzy-production-cluster"
