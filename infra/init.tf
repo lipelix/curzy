@@ -31,7 +31,7 @@ module "curzy-atlas-mongo-db" {
   mongodb_atlas_public_key           = "heboyejr"
   mongodb_atlas_cluster_ip_whitelist = yamldecode(file("${path.module}/atlas-mongo-db/ip-whitelist.yaml"))
   mongodb_atlas_cluster_users = {
-    "curzy-user " = {
+    "curzy-user" = {
       name     = "curzy-user",
       password = var.curzy_user_password,
       roles = [
