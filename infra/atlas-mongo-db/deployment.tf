@@ -48,6 +48,7 @@ resource "mongodbatlas_cluster" "mongodb-cluster" {
   auto_scaling_disk_gb_enabled = var.mongodb_atlas_cluster.auto_scaling_disk_gb_enabled
 
   provider_name               = "TENANT"
+  backing_provider_name       = "GCP"
   provider_region_name        = var.mongodb_atlas_cluster.region_name
   provider_instance_size_name = var.mongodb_atlas_cluster.instance_size_name
 }
