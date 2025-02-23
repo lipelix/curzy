@@ -6,8 +6,6 @@ terraform {
     workspaces {
       name = "curzy"
     }
-
-    version = ">= 1.0.0"
   }
 }
 
