@@ -21,3 +21,6 @@ typings/
 # Terraform related files
 .terraform
 env.auto.tfvars
+
+# build output
+dist/

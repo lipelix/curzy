@@ -1,10 +1,11 @@
 terraform {
   required_providers {
     mongodbatlas = {
-      source = "mongodb/mongodbatlas"
+      source  = "mongodb/mongodbatlas"
+      version = "1.27.0"
     }
   }
-  required_version = ">= 1.0"
+  required_version = ">= 1.7.4"
 }
 
 provider "mongodbatlas" {
@@ -23,17 +24,29 @@ locals {
   })
 }
 
-data "mongodbatlas_project" "atlas-project" {
-  name = var.mongodb_atlas_cluster_project_name
+data "mongodbatlas_organization" "atlas-org" {
+  org_id = var.mongodb_atlas_org_name
+}
+
+resource "mongodbatlas_project" "atlas-project" {
+  name   = var.mongodb_atlas_cluster_project_name
+  org_id = data.mongodbatlas_organization.atlas-org.id
+
+  is_collect_database_specifics_statistics_enabled = true
+  is_data_explorer_enabled                         = true
+  is_extended_storage_sizes_enabled                = true
+  is_performance_advisor_enabled                   = true
+  is_realtime_performance_panel_enabled            = true
+  is_schema_advisor_enabled                        = true
 }
 
 output "atlas_project_id" {
-  value       = data.mongodbatlas_project.atlas-project.id
+  value       = mongodbatlas_project.atlas-project.id
   description = "Output the project id for the MongoDB Atlas project"
 }
 
 resource "mongodbatlas_cluster" "mongodb-cluster" {
-  project_id   = data.mongodbatlas_project.atlas-project.id
+  project_id   = mongodbatlas_project.atlas-project.id
   name         = var.mongodb_atlas_cluster_name
   cluster_type = "REPLICASET"
   replication_specs {
@@ -58,7 +71,7 @@ resource "mongodbatlas_database_user" "mongodb-rw-users" {
 
   username           = each.value.name
   password           = each.value.password
-  project_id         = data.mongodbatlas_project.atlas-project.id
+  project_id         = mongodbatlas_project.atlas-project.id
   auth_database_name = "admin"
 
   dynamic "roles" {
@@ -73,7 +86,7 @@ resource "mongodbatlas_database_user" "mongodb-rw-users" {
 resource "mongodbatlas_project_ip_access_list" "ip-whitelist" {
   for_each = local.ip_whitelist
 
-  project_id = data.mongodbatlas_project.atlas-project.id
+  project_id = mongodbatlas_project.atlas-project.id
   ip_address = each.value.ip
   comment    = each.value.comment
 }
@@ -81,7 +94,7 @@ resource "mongodbatlas_project_ip_access_list" "ip-whitelist" {
 resource "mongodbatlas_project_ip_access_list" "cidr-whitelist" {
   for_each = local.cidr_whitelist
 
-  project_id = data.mongodbatlas_project.atlas-project.id
+  project_id = mongodbatlas_project.atlas-project.id
   cidr_block = each.value.ip
   comment    = each.value.comment
 }

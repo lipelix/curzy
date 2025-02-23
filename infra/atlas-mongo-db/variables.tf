@@ -15,19 +15,22 @@ variable "mongodb_atlas_cluster" {
 }
 variable "mongodb_atlas_cluster_ip_whitelist" {
   type = list(object({
-    ip = string,
+    ip      = string,
     comment = string
   }))
 }
 variable "mongodb_atlas_cluster_users" {
   type = map(object({
-    name = string
+    name     = string
     password = string
     roles = list(object({
-      role_name = string,
+      role_name     = string,
       database_name = string
     }))
   }))
+}
+variable "mongodb_atlas_org_name" {
+  type = string
 }
 variable "mongodb_atlas_cluster_name" {
   type = string
