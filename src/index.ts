@@ -9,7 +9,7 @@ const corsOptions = {
 }
 
 const app = express()
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 
 (async (app: express.Application) => {
   await initializeDbConnection(app)
@@ -24,5 +24,5 @@ app.get('/', async (req, res) => {
 })
 
 app.listen(PORT, () => {
-  console.log(`Example app listening on PORT ${PORT}`)
+  console.log(`🚀 Curzy app listening on PORT ${PORT}`)
 })
