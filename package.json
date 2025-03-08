@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "node -r dotenv/config ./dist/index.js",
     "start": "node ./dist/index.js",
+    "feed-job": "node -r dotenv/config ./dist/jobs/all.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "build-watch": "tsc --watch"
@@ -30,7 +31,7 @@
     "csv-parse": "^5.0.4",
     "express": "^4.17.3",
     "mongodb": "^4.4.1",
-    "puppeteer": "^13.4.1"
+    "puppeteer": "^24.4.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.1",

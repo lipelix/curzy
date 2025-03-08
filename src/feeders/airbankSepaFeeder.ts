@@ -53,6 +53,8 @@ const normalizeData = (rawData: Array<AirbankRate>): RatesDb => {
 }
 
 export const processData = async (): Promise<RatesDb> => {
+  console.log(`⬇️ Fetching data from Airbank SEPA...`);
   const rawData = await fetchData()
+  console.log('✅ Data fetched from Airbank SEPA');
   return normalizeData(rawData)
 }

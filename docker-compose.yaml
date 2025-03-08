@@ -27,3 +27,19 @@ services:
       - -c
       - |
         npx tsc --watch & npx nodemon -L ./dist/index.js
+
+  curzy-feed-job:
+    build: .
+    environment:
+      - MONGO_DB_URI=mongodb://mongodb:27017
+      - MONGO_DB_NAME=curzy-production-cluster
+    depends_on:
+      - mongodb
+    volumes:
+      - ./src:/app/src
+      - ./dist:/app/dist
+    command:
+      - /bin/sh
+      - -c
+      - |
+        node node_modules/puppeteer/install.js & npx tsc --watch & npx nodemon -L ./dist/jobs/all.js

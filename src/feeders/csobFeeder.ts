@@ -3,7 +3,8 @@ import { parse } from 'csv-parse/sync';
 import retry from 'async-await-retry';
 
 export const fetchData = async (): Promise<ParsedRecordsCsob> => {
-  const browser = await puppeteer.launch({headless: true, args:['--no-sandbox']});
+  console.log('bujaga', puppeteer);
+  const browser = await puppeteer.launch({headless: true, args:['--no-sandbox'], dumpio: true,});
   const page = await browser.newPage();
   await retry(async () => {
     return page.goto(`https://www.csob.cz/portal/lide/kurzovni-listek-old/-/date/kurzy.txt`)
@@ -54,6 +55,8 @@ const normalizeData = (records: ParsedRecordsCsob): RatesDb => {
 }
 
 export const processData = async (): Promise<RatesDb> => {
+  console.log(`⬇️ Fetching data from CSOB...`);
   const rawData = await fetchData()
+  console.log('✅ Data fetched from CSOB');
   return normalizeData(rawData)
 }
