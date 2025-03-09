@@ -54,6 +54,8 @@ const normalizeData = (records: ParsedRecordsCsob): RatesDb => {
 }
 
 export const processData = async (): Promise<RatesDb> => {
+  console.log(`⬇️ Fetching data from CSOB...`);
   const rawData = await fetchData()
+  console.log('✅ Data fetched from CSOB');
   return normalizeData(rawData)
 }

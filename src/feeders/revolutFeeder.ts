@@ -29,6 +29,8 @@ const normalizeData = (rawData: string): RatesDb => {
 }
 
 export const processData = async (): Promise<RatesDb> => {
+  console.log(`⬇️ Fetching data from Revolut...`);
   const rawData = await fetchData()
+  console.log('✅ Data fetched from Revolut');
   return normalizeData(rawData)
 }

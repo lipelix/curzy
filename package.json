@@ -11,8 +11,7 @@
     "build-watch": "tsc --watch"
   },
   "engines": {
-    "node": "^17.7.1",
-    "npm": "^8.5.2"
+    "node": "^20.0.0"
   },
   "repository": {
     "type": "git",
@@ -30,7 +29,7 @@
     "csv-parse": "^5.0.4",
     "express": "^4.17.3",
     "mongodb": "^4.4.1",
-    "puppeteer": "^13.4.1"
+    "puppeteer": "^24.4.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.1",
