@@ -54,22 +54,22 @@ You can run this project locally (even if it doesn't make much sense :).
 ### Installation
 
 1. Setup MongoDb - prepare host, username and password for connection
-2. Clone the repo
+1. Clone the repo
    ```sh
    git clone https://github.com/lipelix/curzy.git
    ```
-3. Install NPM packages
+1. Install NPM packages
    ```sh
    npm install
    ```
-4. Create `.env` file in root project folder
-5. Enter your API in `.env` file
+1. Rename `.env.example` file in root project and fill variables
+1. Enter your API in `.env` file
    ```
-    MONGO_DB_HOST: <host of mongo cluster>
-    MONGO_DB_PWD: <password for user>
-    MONGO_DB_USER: <user name>
+    MONGO_DB_URI: <host of mongo cluster>
+    MONGO_DB_NAME: <database name>
+    PORT: <port on which server will run>
    ```
-6. Run your app by `npm run dev`
+1. Run your app by `npm run dev`
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 

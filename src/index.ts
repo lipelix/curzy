@@ -3,6 +3,7 @@ import cors from 'cors'
 import { initializeDbConnection } from './db/init'
 import rates from './api/rates'
 import fees from './api/fees'
+import allJobsRouter from './jobs/all'
 
 const corsOptions = {
   origin: 'https://curzy.herokuapp.com',
@@ -18,6 +19,7 @@ const PORT = process.env.PORT;
 app.use(cors(corsOptions))
 app.use('/api/rates', rates)
 app.use('/api/fees', fees)
+app.use('/jobs/all', allJobsRouter)
 
 app.get('/', async (req, res) => {
   res.send('Welcome on Curzy!')

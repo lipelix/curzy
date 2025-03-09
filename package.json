@@ -6,14 +6,12 @@
   "scripts": {
     "dev": "node -r dotenv/config ./dist/index.js",
     "start": "node ./dist/index.js",
-    "feed-job": "node -r dotenv/config ./dist/jobs/all.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "build-watch": "tsc --watch"
   },
   "engines": {
-    "node": "^17.7.1",
-    "npm": "^8.5.2"
+    "node": "^20.0.0"
   },
   "repository": {
     "type": "git",
