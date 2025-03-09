@@ -1,0 +1,85 @@
+name: "Deploy to Production"
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+" # semantic versioning
+
+jobs:
+  deploy-prod:
+    name: "Deploy to Production"
+    runs-on: ubuntu-latest
+    environment: production
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # Create .env_variables.yaml file from GitHub Secrets used in app engine deployment
+      - name: Create .env_variables.yaml for GCP app engine deployment
+        working-directory: . # take root directory as working directory
+        run: |-
+          cat > .env_variables.yaml <<EOF
+          env_variables:
+            MONGO_DB_URI: ${{ secrets.MONGO_DB_URI }}
+            MONGO_DB_NAME: curzy-production-cluster
+            PORT: 3000
+          EOF
+          cat .env_variables.yaml
+
+      - name: Prepare deploy version variable
+        run: |-
+          TAG=${{ github.ref_name }}
+          echo "DEPLOY_VERSION=${TAG//./-}" >> $GITHUB_ENV
+
+      - name: Deploy services to GCP app engine
+        uses: actions-hub/gcloud@master
+        env:
+          PROJECT_ID: curzy-453212
+          APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APP_ENGINE_CREDENTIALS }}
+        with:
+          args: app deploy --version=${{ env.DEPLOY_VERSION }} ./app.yaml
+          cli: gcloud
+
+      - name: Deploy routes to GCP app engine
+        uses: actions-hub/gcloud@master
+        env:
+          PROJECT_ID: curzy-453212
+          APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APP_ENGINE_CREDENTIALS }}
+        with:
+          args: app deploy ./dispatch.yaml
+          cli: gcloud
+
+      # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      # Since Terraform cloud does not support run variables at this time.
+      # Currently the only to way to pass variables is by creating a `*.auto.tfvars` variables file.
+      - name: Setup Terraform variables
+        working-directory: infrastructure
+        id: vars
+        run: |-
+          cat > pipeline.auto.tfvars <<EOF
+          mongodb_atlas_private_key = "${{ secrets.ATLAS_DB_PROJECT_PRIVATE_API_KEY }}"
+          curzy_user_password       = "${{ secrets.MONGODB_USER_PASSWORD }}"
+          EOF
+          cat pipeline.auto.tfvars
+
+      # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+      - name: Terraform Init
+        working-directory: infrastructure
+        run: terraform init
+
+      # Deploy infrastructure to production
+      - name: Terraform Apply
+        working-directory: infrastructure
+        run: terraform apply -auto-approve -input=false
