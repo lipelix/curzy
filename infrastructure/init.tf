@@ -9,6 +9,11 @@ terraform {
   }
 }
 
+provider "google" {
+  project = var.gcp_project_id
+  region  = "us-east1" // Free Tier is only available in us-east1, us-west1, and us-central1 regions
+}
+
 variable "mongodb_atlas_private_key" {
   type      = string
   sensitive = true
@@ -45,4 +50,13 @@ module "curzy-atlas-mongo-db" {
     cloud_backup                 = false
     auto_scaling_disk_gb_enabled = false
   }
+}
+
+resource "google_app_engine_application" "default" {
+  project     = var.gcp_project_id
+  location_id = "us-central"
+}
+
+output "App_engine_default_hostname" {
+  value = google_app_engine_application.default.default_hostname
 }

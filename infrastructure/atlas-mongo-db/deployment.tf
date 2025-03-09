@@ -66,6 +66,10 @@ resource "mongodbatlas_cluster" "mongodb-cluster" {
   provider_instance_size_name = var.mongodb_atlas_cluster.instance_size_name
 }
 
+output "Connection_strings" {
+  value = mongodbatlas_cluster.mongodb-cluster.connection_strings
+}
+
 resource "mongodbatlas_database_user" "mongodb-rw-users" {
   for_each = var.mongodb_atlas_cluster_users
 
