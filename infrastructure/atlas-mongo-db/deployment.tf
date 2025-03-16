@@ -14,12 +14,10 @@ provider "mongodbatlas" {
 }
 
 locals {
-  gcp_ip_list = concat([
-    for prefix in jsondecode(data.http.gcp_ip_list.response_body).prefixes : prefix.ipv4Prefix if contains(keys(prefix), "ipv4Prefix")
-    ],
-    [
-      for prefix in jsondecode(data.http.gcp_ip_list.response_body).prefixes : prefix.ipv6Prefix if contains(keys(prefix), "ipv6Prefix")
-  ])
+  gcp_ip_list = concat(
+    [for prefix in jsondecode(data.http.gcp_ip_list.response_body).prefixes : prefix.ipv4Prefix if contains(keys(prefix), "ipv4Prefix")],
+    # [for prefix in jsondecode(data.http.gcp_ip_list.response_body).prefixes : prefix.ipv6Prefix if contains(keys(prefix), "ipv6Prefix")]
+  )
 }
 
 data "mongodbatlas_organization" "atlas-org" {

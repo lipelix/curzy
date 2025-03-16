@@ -13,12 +13,7 @@ variable "mongodb_atlas_cluster" {
     auto_scaling_disk_gb_enabled = bool
   })
 }
-variable "mongodb_atlas_cluster_ip_whitelist" {
-  type = list(object({
-    ip      = string,
-    comment = string
-  }))
-}
+
 variable "mongodb_atlas_cluster_users" {
   type = map(object({
     name     = string
