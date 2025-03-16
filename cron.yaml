@@ -1,0 +1,4 @@
+cron:
+- description: "30 mins cron job to feed rates to the database"
+  url: /jobs/all
+  schedule: every 30 mins

@@ -47,13 +47,13 @@ jobs:
           args: app deploy --version=${{ env.DEPLOY_VERSION }} ./app.yaml
           cli: gcloud
 
-      - name: Deploy routes to GCP app engine
+      - name: Deploy cron to GCP app engine
         uses: actions-hub/gcloud@master
         env:
           PROJECT_ID: curzy-453212
           APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APP_ENGINE_CREDENTIALS }}
         with:
-          args: app deploy ./dispatch.yaml
+          args: app deploy ./cron.yaml
           cli: gcloud
 
       # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
