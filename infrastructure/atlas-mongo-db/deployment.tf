@@ -14,14 +14,12 @@ provider "mongodbatlas" {
 }
 
 locals {
-  ip_whitelist = tomap({
-    for record in [for record in var.mongodb_atlas_cluster_ip_whitelist : record if !strcontains(record.ip, "/")] :
-    "${record.ip}_key" => record
-  })
-  cidr_whitelist = tomap({
-    for record in [for record in var.mongodb_atlas_cluster_ip_whitelist : record if strcontains(record.ip, "/")] :
-    "${record.ip}_key" => record
-  })
+  gcp_ip_list = concat([
+    for prefix in jsondecode(data.http.gcp_ip_list.response_body).prefixes : prefix.ipv4Prefix if contains(keys(prefix), "ipv4Prefix")
+    ],
+    [
+      for prefix in jsondecode(data.http.gcp_ip_list.response_body).prefixes : prefix.ipv6Prefix if contains(keys(prefix), "ipv6Prefix")
+  ])
 }
 
 data "mongodbatlas_organization" "atlas-org" {
@@ -87,18 +85,18 @@ resource "mongodbatlas_database_user" "mongodb-rw-users" {
   }
 }
 
-resource "mongodbatlas_project_ip_access_list" "ip-whitelist" {
-  for_each = local.ip_whitelist
+data "http" "gcp_ip_list" {
+  url = "https://www.gstatic.com/ipranges/goog.json"
 
-  project_id = mongodbatlas_project.atlas-project.id
-  ip_address = each.value.ip
-  comment    = each.value.comment
+  request_headers = {
+    Accept = "application/json"
+  }
 }
 
 resource "mongodbatlas_project_ip_access_list" "cidr-whitelist" {
-  for_each = local.cidr_whitelist
+  for_each = toset(local.gcp_ip_list)
 
   project_id = mongodbatlas_project.atlas-project.id
-  cidr_block = each.value.ip
-  comment    = each.value.comment
+  cidr_block = each.value
+  comment    = "GCP CIDR whitelist"
 }
