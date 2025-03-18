@@ -29,7 +29,6 @@ jobs:
           env_variables:
             MONGO_DB_URI: ${{ secrets.MONGO_DB_URI }}
             MONGO_DB_NAME: curzy-production-cluster
-            PORT: 3000
           EOF
           cat .env_variables.yaml
 
