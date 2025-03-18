@@ -3,7 +3,7 @@ import { parse } from 'csv-parse/sync';
 import retry from 'async-await-retry';
 
 export const fetchData = async (): Promise<ParsedRecordsCsob> => {
-  const browser = await puppeteer.launch({headless: true, args:['--no-sandbox']});
+  const browser = await puppeteer.launch({headless: true, args:['--no-sandbox'], dumpio: true});
   const page = await browser.newPage();
   await retry(async () => {
     return page.goto(`https://www.csob.cz/portal/lide/kurzovni-listek-old/-/date/kurzy.txt`)

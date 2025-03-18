@@ -7,7 +7,7 @@
     "dev": "node -r dotenv/config ./dist/index.js",
     "start": "node ./dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx puppeteer browsers install chrome && tsc",
+    "build": "tsc",
     "build-watch": "tsc --watch"
   },
   "engines": {
