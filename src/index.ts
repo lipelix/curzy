@@ -1,5 +1,4 @@
 import express from "express";
-import cors from "cors";
 import { initializeDbConnection } from "./db/init";
 import rates from "./api/rates";
 import fees from "./api/fees";
