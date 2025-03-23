@@ -11,13 +11,7 @@ const PORT = process.env.PORT;
   await initializeDbConnection(app);
 })(app);
 
-app.use("/api/rates", rates);
-app.use("/api/fees", fees);
 app.use("/jobs/all", allJobsRouter);
-
-app.get("/", async (req, res) => {
-  res.send("Welcome on Curzy!");
-});
 
 app.listen(PORT, () => {
   console.log(`🚀 Curzy app listening on PORT ${PORT}`);
