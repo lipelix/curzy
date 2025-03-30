@@ -7,3 +7,24 @@ services:
     volumes:
       - ./mongo-data/mongodb:/data/db
       - ./log/mongo:/log
+
+  curzy-app:
+    image: us-central1-docker.pkg.dev/curzy-453212/gae-standard/app/default:b9c5cb19-91f8-4924-8de6-0e4eda7182c4
+    env_file:
+      - .env
+    environment:
+      - MONGO_DB_URI=mongodb://mongodb:27017
+    ports:
+      - "8081:8081"
+
+  curzy-website:
+    build: ./website
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./website:/app
+    env_file:
+      - ./website/.env
+    stdin_open: true
+    tty: true
+    command: npm start
