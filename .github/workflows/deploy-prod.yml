@@ -23,7 +23,7 @@ jobs:
 
       # Create .env_variables.yaml file from GitHub Secrets used in app engine deployment
       - name: Create .env_variables.yaml for GCP app engine deployment
-        working-directory: . # take root directory as working directory
+        working-directory: apps/feeder # take root directory as working directory
         run: |-
           cat > .env_variables.yaml <<EOF
           env_variables:
