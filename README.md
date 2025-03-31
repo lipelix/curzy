@@ -53,14 +53,11 @@ You can run this project locally (even if it doesn't make much sense :).
 
 ### Installation
 
-1. Setup MongoDb - prepare host, username and password for connection
-1. Clone the repo
-   ```sh
-   git clone https://github.com/lipelix/curzy.git
-   ```
+## Run locally
+
 1. Install NPM packages
    ```sh
-   npm install
+   npm install --prefix ./apps/feeder
    ```
 1. Rename `.env.example` file in root project and fill variables
 1. Enter your API in `.env` file
@@ -69,7 +66,12 @@ You can run this project locally (even if it doesn't make much sense :).
     MONGO_DB_NAME: <database name>
     PORT: <port on which server will run>
    ```
-1. Run your app by `npm run dev`
+1. Run `docker-compose up` - this will spin up MongoDB instance
+1. Run your app by `npm run dev --prefix ./apps/feeder`
+1. Initiate feeder by curl
+   ```sh
+   curl --location --request GET 'http://localhost:8081/jobs/all'
+   ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
