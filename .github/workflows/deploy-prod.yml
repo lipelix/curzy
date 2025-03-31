@@ -71,7 +71,7 @@ jobs:
           PROJECT_ID: curzy-453212
           APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APP_ENGINE_CREDENTIALS }}
         with:
-          args: app deploy --version=${{ env.DEPLOY_VERSION }} ./app.yaml
+          args: app deploy --version=${{ env.DEPLOY_VERSION }} ./apps/feeder/app.yaml
           cli: gcloud
 
       - name: Deploy cron to GCP app engine
@@ -80,5 +80,5 @@ jobs:
           PROJECT_ID: curzy-453212
           APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APP_ENGINE_CREDENTIALS }}
         with:
-          args: app deploy ./cron.yaml
+          args: app deploy ./apps/feeder/cron.yaml
           cli: gcloud
