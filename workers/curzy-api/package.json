@@ -1,0 +1,20 @@
+{
+	"name": "curzy-api",
+	"private": true,
+	"scripts": {
+		"start": "wrangler dev --port=8000 --var ENVIRONMENT:local",
+		"build": "wrangler deploy --dry-run --outdir ../dist/curzy-api",
+		"typecheck": "tsc --project tsconfig.json --noEmit"
+	},
+	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20250418.0",
+		"@types/node": "^22.14.1",
+		"typescript": "^5.8.3",
+		"wrangler": "^4.12.0"
+	},
+	"dependencies": {
+		"@cloudflare/itty-router-openapi": "^1.1.1",
+		"mongodb": "^6.15.0",
+		"zod-to-json-schema": "^3.24.5"
+	}
+}
