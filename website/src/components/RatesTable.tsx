@@ -26,7 +26,7 @@ const RatesTable: React.FC<{ rates: RatesTableCollection }> = ({ rates }) => {
 
       <Table.Body>
         {rates.map((row: RatesTable) => (
-          <Table.Row key={row.institution}>
+          <Table.Row key={`${row.institution}_${row.paymentType}`}>
             <Table.Cell>
               {row.cheapest && (
                 <Label ribbon color="green" style={{ display: 'block', margin: '-2em 0 1em -1em' }}>
