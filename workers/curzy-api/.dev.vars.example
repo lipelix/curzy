@@ -1,1 +1,2 @@
 MONGO_DB_URI=<uri-to-your-mongodb-instance>
+ALLOWED_ORIGINS=<array_of_allowed_origins_calling_this_worker>
