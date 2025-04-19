@@ -3,9 +3,11 @@ import { RatesFetch } from "./endpoints/rates-fetch";
 import { FeesFetch } from "./endpoints/fees-fetch";
 import { MongoClient } from "mongodb";
 import { logger } from "./logger";
+import { createCors } from "itty-router";
 
 export type Env = {
   MONGO_DB_URI: string;
+  ALLOWED_ORIGINS: string[];
 };
 
 export const router = OpenAPIRouter({
@@ -16,6 +18,15 @@ export const router = OpenAPIRouter({
     security: [],
   },
 });
+
+// check https://itty.dev/itty-router/cors for more options
+const { preflight, corsify } = createCors({
+  methods: ["OPTIONS, GET"],
+  origins: process.env.ALLOWED_ORIGINS,
+});
+
+// embed preflight upstream to handle all requests
+router.all("*", preflight);
 
 const databaseMiddleware = async (request: Request, env: any, context: any) => {
   let client;
@@ -62,6 +73,6 @@ export default {
       contentLength: request.headers.get("content-length"),
     };
     logger(request)("📨 Request received");
-    return router.handle(request, env, context);
+    return router.handle(request, env, context).then(corsify);
   },
 };
