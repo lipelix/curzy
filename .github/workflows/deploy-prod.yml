@@ -64,6 +64,7 @@ jobs:
         id: vars
         run: |-
           cat > pipeline.auto.tfvars <<EOF
+          cloudflare_api_token      = "${{ secrets.CLOUDFLARE_API_TOKEN }}"
           allowed_origins           = "${{ secrets.ALLOWED_ORIGINS }}"
           mongo_db_uri              = "${{ secrets.MONGO_DB_URI }}"
           mongodb_atlas_private_key = "${{ secrets.ATLAS_DB_PROJECT_PRIVATE_API_KEY }}"
