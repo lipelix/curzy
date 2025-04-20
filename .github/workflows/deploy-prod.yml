@@ -37,6 +37,20 @@ jobs:
           TAG=${{ github.ref_name }}
           echo "DEPLOY_VERSION=${TAG//./-}" >> $GITHUB_ENV
 
+      - name: Install wrangler & prepare workers-dist
+        working-directory: infrastructure
+        run: |-
+          npm install -g wrangler
+          wrangler --version
+          mkdir --parents workers-dist
+  
+      - name: Build workers - curzy-api
+        working-directory: workers/curzy-api
+        run: |-
+          npm install
+          npm run build
+          cp -r ../dist/curzy-api ../../infrastructure/workers-dist/curzy-api
+
       # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
@@ -50,6 +64,8 @@ jobs:
         id: vars
         run: |-
           cat > pipeline.auto.tfvars <<EOF
+          allowed_origins           = "${{ secrets.ALLOWED_ORIGINS }}"
+          mongo_db_uri              = "${{ secrets.MONGO_DB_URI }}"
           mongodb_atlas_private_key = "${{ secrets.ATLAS_DB_PROJECT_PRIVATE_API_KEY }}"
           curzy_user_password       = "${{ secrets.MONGODB_USER_PASSWORD }}"
           EOF
