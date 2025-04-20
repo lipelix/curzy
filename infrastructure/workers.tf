@@ -4,6 +4,7 @@ resource "cloudflare_workers_script" "curzy_api" {
   compatibility_date  = "2024-12-05"
   compatibility_flags = ["nodejs_compat", "nodejs_compat_populate_process_env"]
   content             = sensitive(file("${path.root}/workers-dist/curzy-api/index.js"))
+  main_module         = "index.js"
 
   bindings = [{
     name = "MONGO_DB_URI"
