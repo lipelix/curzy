@@ -25,3 +25,4 @@ env.auto.tfvars
 # build output
 dist/
 mongo-data/
+workers-dist/

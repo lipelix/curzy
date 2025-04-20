@@ -7,11 +7,22 @@ terraform {
       name = "curzy"
     }
   }
+
+  required_providers {
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "5.3.0"
+    }
+  }
 }
 
 provider "google" {
   project = var.gcp_project_id
   region  = "us-east1" // Free Tier is only available in us-east1, us-west1, and us-central1 regions
+}
+
+provider "cloudflare" {
+  api_token = var.cloudflare_api_token
 }
 
 variable "mongodb_atlas_private_key" {
