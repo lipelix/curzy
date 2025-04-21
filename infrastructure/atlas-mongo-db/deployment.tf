@@ -18,6 +18,7 @@ locals {
     [for prefix in jsondecode(data.http.gcp_ip_list.response_body).prefixes : prefix.ipv4Prefix if contains(keys(prefix), "ipv4Prefix")],
     # [for prefix in jsondecode(data.http.gcp_ip_list.response_body).prefixes : prefix.ipv6Prefix if contains(keys(prefix), "ipv6Prefix")]
   )
+  cloudflare_ip_list = jsondecode(data.http.cloudflare_ip_list.response_body).result.ipv4_cidrs
 }
 
 data "mongodbatlas_organization" "atlas-org" {
@@ -91,10 +92,26 @@ data "http" "gcp_ip_list" {
   }
 }
 
+data "http" "cloudflare_ip_list" {
+  url = "https://api.cloudflare.com/client/v4/ips"
+
+  request_headers = {
+    Accept = "application/json"
+  }
+}
+
 resource "mongodbatlas_project_ip_access_list" "cidr-whitelist" {
   for_each = toset(local.gcp_ip_list)
 
   project_id = mongodbatlas_project.atlas-project.id
   cidr_block = each.value
   comment    = "GCP CIDR whitelist"
+}
+
+resource "mongodbatlas_project_ip_access_list" "cloudflare-cidr-whitelist" {
+  for_each = toset(local.cloudflare_ip_list)
+
+  project_id = mongodbatlas_project.atlas-project.id
+  cidr_block = each.value
+  comment    = "Cloudflare CIDR whitelist"
 }
