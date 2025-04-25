@@ -16,7 +16,7 @@ provider "mongodbatlas" {
 locals {
   gcp_ip_list = concat(
     [for prefix in jsondecode(data.http.gcp_ip_list.response_body).prefixes : prefix.ipv4Prefix if contains(keys(prefix), "ipv4Prefix")],
-    # [for prefix in jsondecode(data.http.gcp_ip_list.response_body).prefixes : prefix.ipv6Prefix if contains(keys(prefix), "ipv6Prefix")]
+    # [for prefix in jsondecode(data.http.gcp_ip_list.response_body).prefixes : prefix.ipv6Prefix if contains(keys(prefix), "ipv6Prefix")]  # Atlas only supports IPv4 - https://feedback.mongodb.com/forums/928699-ui/suggestions/42795821-network-access-ipv6-support
   )
   cloudflare_ip_list = jsondecode(data.http.cloudflare_ip_list.response_body).result.ipv4_cidrs
 }
