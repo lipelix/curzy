@@ -1,7 +1,5 @@
 import express from "express";
 import { initializeDbConnection } from "./db/init";
-import rates from "./api/rates";
-import fees from "./api/fees";
 import allJobsRouter from "./jobs/all";
 
 const app = express();
