@@ -4,11 +4,15 @@ import {
 }
 
 resource "cloudflare_pages_project" "curzy" {
+  lifecycle {
+    ignore_changes = all # !!TODO: remove this line when the issue is fixed https://github.com/cloudflare/terraform-provider-cloudflare/issues/5412
+  }
+
   account_id        = data.cloudflare_account.lipelix_labs.account_id
   name              = "curzy"
   production_branch = "main"
 
-  # Issue in clouflare provider - https://github.com/cloudflare/terraform-provider-cloudflare/issues/5093 done manually until fixed
+  # !!TODO: remove this line when the issue is fixed: https://github.com/cloudflare/terraform-provider-cloudflare/issues/5093 done manually until fixed
   # source = {
   #   type = "github"
   #   config = {
