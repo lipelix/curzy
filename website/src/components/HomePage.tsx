@@ -13,14 +13,17 @@ ReactGA.initialize([
 ])
 ReactGA.send({ hitType: 'pageview', page: window.location.pathname })
 
-const computeExchangeRates = (wantAmount: number, rates: RatesCollection, fees: Fees) => {
+export const computeExchangeRates = (wantAmount: number, rates: RatesCollection, fees: Fees) => {
   return rates
     .map((rate) => {
       const paymentType = rate.paymentType
       const rawPrice = rate.rate * wantAmount
       const institutionFeePrice = rate.fee * wantAmount
+      const isCryptoExchangeFixedFee = fees.BINANCE[paymentType].type === 'fixed'
       const cryptoExchangeFee = fees.BINANCE[paymentType].value
-      const cryptoExchangeFeePrice = (rawPrice + institutionFeePrice) * (fees.BINANCE[paymentType].value / 100) // only Binance for now
+      const cryptoExchangeFeePrice = isCryptoExchangeFixedFee
+        ? fees.BINANCE[paymentType].value * rate.rate
+        : (rawPrice + institutionFeePrice) * (fees.BINANCE[paymentType].value / 100) // only Binance for now
       const price = rawPrice + institutionFeePrice + cryptoExchangeFeePrice
 
       return {
@@ -33,6 +36,7 @@ const computeExchangeRates = (wantAmount: number, rates: RatesCollection, fees: 
         institutionFeePrice: institutionFeePrice,
         cryptoExchangeFee: cryptoExchangeFee,
         cryptoExchangeFeePrice: cryptoExchangeFeePrice,
+        isCryptoExchangeFixedFee: isCryptoExchangeFixedFee,
       }
     })
     .sort((a, b) => a.price - b.price)
@@ -48,7 +52,9 @@ const computeExchangeRates = (wantAmount: number, rates: RatesCollection, fees: 
       priceDifference: `+${rate.priceDifference.toFixed(0)} Kč`,
       institutionFee: `${rate.institutionFee} %`,
       institutionFeePrice: `${rate.institutionFeePrice.toFixed(0)} Kč`,
-      cryptoExchangeFee: `${rate.cryptoExchangeFee} %`,
+      cryptoExchangeFee: rate.isCryptoExchangeFixedFee
+        ? `${rate.cryptoExchangeFee} €`
+        : `${rate.cryptoExchangeFee} %`,
       cryptoExchangeFeePrice: `${rate.cryptoExchangeFeePrice.toFixed(0)} Kč`,
     }))
 }
@@ -62,7 +68,7 @@ function HomePage() {
         value: 0,
       },
       SEPA: {
-        type: 'percentage',
+        type: 'fixed',
         value: 0,
       },
     },

@@ -10,14 +10,16 @@ type RatesDb = {
   fee: number
 }
 
+type FeesTypes = 'fixed' | 'percentage'
+
 type Fees = {
   BINANCE: {
     CARD: {
-      type: 'percentage'
+      type: FeesTypes
       value: number
     }
     SEPA: {
-      type: 'percentage'
+      type: FeesTypes
       value: number
     }
   }

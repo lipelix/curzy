@@ -8,7 +8,7 @@ export const FeesSchema = z
         value: z.number(),
       }),
       SEPA: z.object({
-        type: z.enum(["percentage"]),
+        type: z.enum(["percentage", "fixed"]),
         value: z.number(),
       }),
     }),

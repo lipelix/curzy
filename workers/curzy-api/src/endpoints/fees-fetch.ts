@@ -29,11 +29,11 @@ export class FeesFetch extends OpenAPIRoute {
       BINANCE: {
         CARD: {
           type: "percentage",
-          value: 1.8,
+          value: 2, // 2% fee for card payments https://www.binance.com/en/fee/fiatFee
         },
         SEPA: {
-          type: "percentage",
-          value: 0,
+          type: "fixed",
+          value: 1, // 1 EUR fee for SEPA payments https://www.binance.com/en/fee/fiatFee
         },
       },
     };
