@@ -7,9 +7,9 @@
   <h3 align="center">curzy</h3>
 
   <p align="center">
-    Check how much it cost to buy some crypto.
+    Check how much it costs to buy some crypto.
     <br />
-    <a href="https://curzy.herokuapp.com/"><strong>https://curzy.herokuapp.com/</strong></a>
+    <a href="https://curzy.pages.dev/"><strong>https://curzy.pages.dev/</strong></a>
     <br />
     <br />
     <a href="https://github.com/lipelix/curzy/issues">Report Bug</a>
@@ -24,63 +24,74 @@
 
 <!-- [![Product Name Screen Shot][product-screenshot]](assets/app-screen.png) -->
 
-If you are sending some money to crypto exchange there is always some fee. If you do it from your bank account there is some fee. If you do it by card there is some fee. Curzy will agregate this for you. No more counting of fees by yourself. You are welcome.
+If you are sending some money to a crypto exchange, there is always a fee. If you do it from your bank account, there is a fee. If you do it by card, there is a fee 😞. Curzy will aggregate this for you. No more counting of fees by yourself 🎉. You are welcome.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
-
 
 ### Built and Deploy
 
-This is backend part of its frontend counter-part [curzy-fe](https://github.com/lipelix/curzy-fe). Project is build with express on backend to provide API. It runs workers which regularly check rates with help of [puppeteer](https://github.com/puppeteer/puppeteer). All is deployed on heroku dynos.
+ The project is composed of multiple components:
+ - Frontend website is a React app deployed on [cloudflare pages](https://pages.cloudflare.com/),
+ - API fetching data about rates is built with [cloudflare workers](https://workers.cloudflare.com/),
+ - [Atlas MongoDB](https://www.mongodb.com/products/platform/atlas-database) is used as a database to store data about rates,
+ - Feeder is a scheduled job which is hosted on [GCP app engine](https://cloud.google.com/appengine?hl=cs) - it scrapes data from institutions and saves it to MongoDB,
+ - [Terraform](https://www.terraform.io/) is used to manage infrastructure.
 
-![Node.js](https://img.shields.io/badge/Build%20with-Node.js-brightgreen.svg)
-![puppeteer](https://img.shields.io/badge/Build%20with-puppeteer-brightgreen.svg)
-![Heroku](https://img.shields.io/badge/Deployed%20on-Heroku-7056bf.svg)
+
+![Cloudflare workers](https://img.shields.io/badge/Build%20with-Cloudflare%20Workers-FFCA28.svg)
+![puppeteer](https://img.shields.io/badge/Build%20with-Puppeteer-brightgreen.svg)
+![MongoDB](https://img.shields.io/badge/Stored%20on-MongoDB-47A248.svg)
+![Cloudflare](https://img.shields.io/badge/Deployed%20on-Cloudflare-FFCA28.svg)
+![GCP](https://img.shields.io/badge/Deployed%20on-GCP-4285F4.svg)
+![Terraform](https://img.shields.io/badge/Managed%20with-Terraform-911ced.svg)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+## Overview
+
+General overview of the project architecture.
+
+```mermaid
+flowchart TD
+    A["⏰ Feeder"] -- Store data from website --> B[("Database")]
+    B -- Query data from database --> C["Curzy API Worker"]
+    C -- Fetches data --> D["Website"]
+    n1["Revolut"] -- Scrape --> A
+    n2["CSOB"] -- Scrape --> A
+    n3["Airbank"] -- Scrape --> A
+    n1@{ shape: doc}
+    n2@{ shape: doc}
+    n3@{ shape: doc}
+```
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
 You can run this project locally (even if it doesn't make much sense :).
 
-### Prequisities
+### Prerequisites
 
-* MongoDb (e.g. free tier on https://www.mongodb.com/atlas/database)
-* npm (Node.js)
+* Docker with `docker-compose`
 
-### Installation
+### Setup and Run
 
-## Run locally
-
-1. Install NPM packages
-   ```sh
-   npm install --prefix ./apps/feeder
-   ```
-1. Rename `.env.example` file in root project and fill variables
-1. Enter your API in `.env` file
-   ```
-    MONGO_DB_URI: <host of mongo cluster>
-    MONGO_DB_NAME: <database name>
-    PORT: <port on which server will run>
-   ```
-1. Run `docker-compose up` - this will spin up MongoDB instance
-1. Run your app by `npm run dev --prefix ./apps/feeder`
-1. Initiate feeder by curl
-   ```sh
-   curl --location --request GET 'http://localhost:8081/jobs/all'
-   ```
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
+1. Copy env files, remove `.example` postfix, and fill variables in each sub-project:
+   -  `./apps/feeder/.env.example` - feeder
+   -  `./workers/curzy-api/.dev.vars.example` - API
+   -  `./website/.env.example` - website
+2. Run `docker-compose up` - this will spin up a MongoDB instance and the website
+3. Run `npm run start --prefix ./workers/curzy-api` to start API
+4. Run `npm i --prefix ./apps/feeder` to install dependencies
+5. Run `npm run dev --prefix ./apps/feeder` to start feeder
 
 <!-- USAGE EXAMPLES -->
-## Usage
+### Usage
 
-This is very easy. Just open https://curzy.herokuapp.com/ .
+1. Initiate the feeder to load some data into the database by visiting http://localhost:8081/jobs/all
+2. Open the app in a browser on http://localhost:3000/
+3. Check if the API is running on http://localhost:8000/swagger
 
 <br />
 
@@ -94,11 +105,11 @@ This is very easy. Just open https://curzy.herokuapp.com/ .
 ## Roadmap
 
 - [x] Deploy project
-- [ ] Add Support for automatic deployment
+- [x] Add Support for automatic deployment
 - [ ] Multi-language Support
     - [ ] Czech
     - [x] English
-- [ ] Add more banks, payment methods
+- [ ] Support more banks, payment methods
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -116,7 +127,7 @@ Project Link: [https://github.com/lipelix/curzy](https://github.com/lipelix/curz
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-Usefull links and another things worth to mention.
+Useful links and other things worth mentioning.
 
 * [Husky](https://github.com/typicode/husky) - better commits
 * [puppeteer](https://github.com/puppeteer/puppeteer) - control your chrome by API
