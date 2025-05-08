@@ -8,8 +8,8 @@ const responseMapper = (doc: Document): RatesDb => {
 export const getLatestRates = async (db: mongodb.Db) => {
   const dCollection = await db.collection('rates');
 
-  const lastRateRevolut = await dCollection.find({ institution: "REVOLUT" }).sort({ '_id': -1 }).limit(1).toArray()
-  const lastRateCsob = await dCollection.find({ institution: "CSOB" }).sort({ '_id': -1 }).limit(1).toArray()
+  const lastRateRevolut = await dCollection.find({ institution: "REVOLUT", paymentType: "CARD" }).sort({ '_id': -1 }).limit(1).toArray()
+  const lastRateCsob = await dCollection.find({ institution: "CSOB", paymentType: "SEPA" }).sort({ '_id': -1 }).limit(1).toArray()
   const lastRateAirbankSepa = await dCollection.find({ institution: "AIRBANK", paymentType: "SEPA" }).sort({ '_id': -1 }).limit(1).toArray()
   const lastRateAirbankCard = await dCollection.find({ institution: "AIRBANK", paymentType: "CARD" }).sort({ '_id': -1 }).limit(1).toArray()
 

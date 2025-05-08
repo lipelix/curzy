@@ -14,6 +14,8 @@ export const initializeDbConnection = async (app: express.Application) => {
     console.log("🤝 Connected to db");
 
     app.locals.db = client.db(dbName);
+    const collection = app.locals.db.collection("rates");
+    collection.createIndex({ institution: 1, paymentType: 1, _id: -1 });
   } catch (err) {
     console.error(err);
     if (client) client.close();
